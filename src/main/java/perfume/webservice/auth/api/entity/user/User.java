@@ -1,5 +1,7 @@
 package perfume.webservice.auth.api.entity.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import perfume.webservice.auth.oauth.entity.ProviderType;
 import perfume.webservice.auth.oauth.entity.RoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,6 +22,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "USER")
 public class User {
+
+
     @JsonIgnore
     @Id
     @Column(name = "USER_SEQ")
@@ -75,6 +79,9 @@ public class User {
     @NotNull
     private LocalDateTime modifiedAt;
 
+    @Column(name = "MBTI")
+    private String mbti;
+
     public User(
             @NotNull @Size(max = 64) String userId,
             @NotNull @Size(max = 100) String username,
@@ -84,11 +91,13 @@ public class User {
             @NotNull ProviderType providerType,
             @NotNull RoleType roleType,
             @NotNull LocalDateTime createdAt,
-            @NotNull LocalDateTime modifiedAt
+            @NotNull LocalDateTime modifiedAt,
+            @NotNull String password
     ) {
+
         this.userId = userId;
         this.username = username;
-        this.password = "NO_PASS";
+        this.password = password;
         this.email = email != null ? email : "NO_EMAIL";
         this.emailVerifiedYn = emailVerifiedYn;
         this.profileImageUrl = profileImageUrl != null ? profileImageUrl : "";

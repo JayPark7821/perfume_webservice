@@ -1,5 +1,6 @@
 package perfume.webservice.auth.oauth.service;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import perfume.webservice.auth.api.entity.user.User;
 import perfume.webservice.auth.api.repository.user.UserRepository;
 import perfume.webservice.auth.oauth.entity.ProviderType;
@@ -18,12 +19,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -62,6 +65,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User createUser(OAuth2UserInfo userInfo, ProviderType providerType) {
         LocalDateTime now = LocalDateTime.now();
+        String uuid = UUID.randomUUID().toString();
+        System.out.println("uuid = " + uuid);
+        String initialPw = passwordEncoder.encode(uuid);
+        System.out.println("initialPw = " + initialPw);
         User user = new User(
                 userInfo.getId(),
                 userInfo.getName(),
@@ -71,7 +78,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 providerType,
                 RoleType.USER,
                 now,
-                now
+                now,
+                initialPw
+
         );
 
         return userRepository.saveAndFlush(user);

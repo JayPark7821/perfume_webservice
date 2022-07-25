@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -43,7 +43,7 @@ public class AuthController {
             HttpServletResponse response,
             @RequestBody AuthReqModel authReqModel
     ) {
-        System.out.println("authReqModel = " + authReqModel);
+        System.out.println("authReqModel = " + authReqModel.toString());
         System.out.println("AuthController.login");
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
