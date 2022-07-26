@@ -10,7 +10,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,11 +38,11 @@ public class AuthTokenProvider {
         return new AuthToken(token, key);
     }
 
-    public Authentication getAuthentication(AuthToken authToken, HttpServletRequest request) {
+    public Authentication getAuthentication(AuthToken authToken) {
 
-        if(authToken.validate(request)) {
+        if(authToken.validate()) {
 
-            Claims claims = authToken.getTokenClaims(request);
+            Claims claims = authToken.getTokenClaims();
             Collection<? extends GrantedAuthority> authorities =
                     Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
                             .map(SimpleGrantedAuthority::new)

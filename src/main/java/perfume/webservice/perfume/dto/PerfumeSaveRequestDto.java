@@ -1,4 +1,4 @@
-package perfume.webservice.perfume.admin.dto;
+package perfume.webservice.perfume.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

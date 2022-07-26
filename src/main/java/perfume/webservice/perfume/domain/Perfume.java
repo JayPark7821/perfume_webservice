@@ -3,16 +3,13 @@ package perfume.webservice.perfume.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import perfume.webservice.common.entity.BaseEntity;
-import perfume.webservice.common.entity.BaseTimeEntity;
-import perfume.webservice.common.utils.AuditorProvider;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class Perfume  extends BaseEntity {
+public class Perfume {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

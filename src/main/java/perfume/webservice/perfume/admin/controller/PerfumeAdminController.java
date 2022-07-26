@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import perfume.webservice.auth.common.ApiResponse;
 import perfume.webservice.perfume.admin.service.PerfumeAdminService;
-import perfume.webservice.perfume.admin.dto.PerfumeSaveRequestDto;
+import perfume.webservice.perfume.dto.PerfumeSaveRequestDto;
 
 @RestController
 @RequestMapping("/api/admin")

@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import perfume.webservice.auth.oauth.entity.AuthExceptionType;
-
 @Slf4j
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
@@ -26,12 +24,10 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException authException
     ) throws IOException, ServletException {
-        AuthExceptionType exception = (AuthExceptionType) request.getAttribute("exception");
-        System.out.println("exception = " + exception.getCode());
-        log.info("Responding with Exception. Message := {} , {}", exception.getCode() , exception.getDisplayName());
+
         log.info("Responding with unauthorized error. Message := {}", authException.getMessage());
         String result = objectMapper.writeValueAsString(
-                new ApiResponse(new ApiResponseHeader(HttpServletResponse.SC_UNAUTHORIZED, exception.getDisplayName()), null));
+                new ApiResponse(new ApiResponseHeader(HttpServletResponse.SC_UNAUTHORIZED, authException.getLocalizedMessage()), null));
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(result);

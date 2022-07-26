@@ -30,10 +30,6 @@ public class ApiResponse<T> {
         return new ApiResponse(new ApiResponseHeader(SUCCESS, SUCCESS_MESSAGE), map);
     }
 
-    public static <T> ApiResponse<T> failCustomResponse(int headerCode, String headerMsg) {
-        return new ApiResponse(new ApiResponseHeader(headerCode, headerMsg), null);
-    }
-
     public static <T> ApiResponse<T> fail() {
         return new ApiResponse(new ApiResponseHeader(FAILED, FAILED_MESSAGE), null);
     }
