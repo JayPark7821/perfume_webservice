@@ -1,5 +1,6 @@
 package perfume.webservice.auth.api.controller.auth;
 
+import org.springframework.transaction.annotation.Transactional;
 import perfume.webservice.auth.api.entity.auth.AuthReqModel;
 import perfume.webservice.auth.api.entity.user.UserRefreshToken;
 import perfume.webservice.auth.api.repository.user.UserRefreshTokenRepository;
@@ -27,6 +28,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Transactional
 public class AuthController {
 
     private final AppProperties appProperties;
@@ -91,9 +93,6 @@ public class AuthController {
         // access token 확인
         String accessToken = HeaderUtil.getAccessToken(request);
         AuthToken authToken = tokenProvider.convertAuthToken(accessToken);
-        if (!authToken.validate()) {
-            return ApiResponse.invalidAccessToken();
-        }
 
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
@@ -110,7 +109,7 @@ public class AuthController {
                 .orElse((null));
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
-        if (authRefreshToken.validate()) {
+        if (!authRefreshToken.validate(request)) {
             return ApiResponse.invalidRefreshToken();
         }
 
@@ -127,7 +126,7 @@ public class AuthController {
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
-        long validTime = authRefreshToken.getTokenClaims().getExpiration().getTime() - now.getTime();
+        long validTime = authRefreshToken.getTokenClaims(request).getExpiration().getTime() - now.getTime();
 
         // refresh 토큰 기간이 3일 이하로 남은 경우, refresh 토큰 갱신
         if (validTime <= THREE_DAYS_MSEC) {

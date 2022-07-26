@@ -4,7 +4,9 @@ import io.jsonwebtoken.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import perfume.webservice.auth.oauth.entity.AuthExceptionType;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Date;
 
@@ -45,11 +47,11 @@ public class AuthToken {
                 .compact();
     }
 
-    public boolean validate() {
-        return this.getTokenClaims() != null;
+    public boolean validate(HttpServletRequest request) {
+        return this.getTokenClaims(request) != null;
     }
 
-    public Claims getTokenClaims() {
+    public Claims getTokenClaims(HttpServletRequest request) {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -57,14 +59,22 @@ public class AuthToken {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (SecurityException e) {
+            request.setAttribute("exception", AuthExceptionType.SECURITY_EXCEPTION);
             log.info("Invalid JWT signature.");
         } catch (MalformedJwtException e) {
+            request.setAttribute("exception", AuthExceptionType.MALFORMED_JWT);
             log.info("Invalid JWT token.");
         } catch (ExpiredJwtException e) {
+            request.setAttribute("exception", AuthExceptionType.EXPIRED_JWT);
             log.info("Expired JWT token.");
         } catch (UnsupportedJwtException e) {
+            request.setAttribute("exception", AuthExceptionType.UNSUPPORTED_JWT);
+            log.info("Unsupported JWT token.");
+        } catch (SignatureException e){
+            request.setAttribute("exception", AuthExceptionType.JWT_SIGNATURE_EXCEPTION);
             log.info("Unsupported JWT token.");
         } catch (IllegalArgumentException e) {
+            request.setAttribute("exception", AuthExceptionType.JWT_HANDLER_EXCEPTION);
             log.info("JWT token compact of handler are invalid.");
         }
         return null;

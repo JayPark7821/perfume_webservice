@@ -20,7 +20,7 @@ import java.io.IOException;
 public class TokenAccessDeniedHandler implements AccessDeniedHandler {
 
 //    private final HandlerExceptionResolver handlerExceptionResolver;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
 
