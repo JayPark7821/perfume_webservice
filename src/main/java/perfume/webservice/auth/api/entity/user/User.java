@@ -57,13 +57,11 @@ public class User {
     private String emailVerifiedYn;
 
     @Column(name = "PROFILE_IMAGE_URL", length = 512)
-    @NotNull
     @Size(max = 512)
     private String profileImageUrl;
 
     @Column(name = "PROVIDER_TYPE", length = 20)
     @Enumerated(EnumType.STRING)
-    @NotNull
     private ProviderType providerType;
 
     @Column(name = "ROLE_TYPE", length = 20)
@@ -87,8 +85,8 @@ public class User {
             @NotNull @Size(max = 100) String username,
             @NotNull @Size(max = 512) String email,
             @NotNull @Size(max = 1) String emailVerifiedYn,
-            @NotNull @Size(max = 512) String profileImageUrl,
-            @NotNull ProviderType providerType,
+            @Size(max = 512) String profileImageUrl,
+            ProviderType providerType,
             @NotNull RoleType roleType,
             @NotNull LocalDateTime createdAt,
             @NotNull LocalDateTime modifiedAt,
