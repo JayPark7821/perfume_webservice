@@ -46,7 +46,7 @@ class AuthControllerTest {
     private UserRepository userRepository;
 
     @Autowired
-    BCryptPasswordEncoder psswordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
 
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -97,7 +97,7 @@ class AuthControllerTest {
 //        @NotNull String password
         userRepository.save(new User("testId", "testUser", "test@test.com", "Y", "~~~",
                 ProviderType.valueOf("LOCAL"), RoleType.USER, LocalDateTime.now(), LocalDateTime.now(),
-                psswordEncoder.encode("test")));
+                passwordEncoder.encode("test")));
     }
 
     @BeforeEach
@@ -195,7 +195,6 @@ class AuthControllerTest {
         //when
         MvcResult result = requestMvc(bodyContent, loginUrl);
         Map<String, String> firstTokens = getTokensFromMvcResult(result);
-        Thread.sleep(1000);
 
         MvcResult mvcResult = this.mvc.perform(get(homeUrl)
                 .header("Origin", "http://localhost:3000")
@@ -203,7 +202,8 @@ class AuthControllerTest {
         ).andReturn();
         //then
         assertThat(mvcResult.getResponse().getContentAsString()).isEqualTo("ok");
-
     }
+
+
 
 }

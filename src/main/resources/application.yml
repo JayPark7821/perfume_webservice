@@ -20,7 +20,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update #none
-    show_sql: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
 
   security:
     oauth2:

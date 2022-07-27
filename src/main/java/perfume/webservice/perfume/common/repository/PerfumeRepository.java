@@ -1,7 +1,8 @@
-package perfume.webservice.perfume.domain;
+package perfume.webservice.perfume.common.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import perfume.webservice.perfume.common.domain.Perfume;
 
 import java.util.List;
 

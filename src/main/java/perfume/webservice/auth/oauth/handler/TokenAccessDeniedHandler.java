@@ -26,7 +26,7 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
 
         log.info("Responding with accessDenied error. Message := {}", accessDeniedException.getMessage());
         String result = objectMapper.writeValueAsString(
-                new ApiResponse(new ApiResponseHeader(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getLocalizedMessage()), null));
+                new ApiResponse(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getLocalizedMessage(), null));
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(result);

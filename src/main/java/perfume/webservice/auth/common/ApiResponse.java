@@ -20,33 +20,34 @@ public class ApiResponse<T> {
     private final static String INVALID_REFRESH_TOKEN = "Invalid refresh token.";
     private final static String NOT_EXPIRED_TOKEN_YET = "Not expired token yet.";
 
-    private final ApiResponseHeader header;
-    private final Map<String, T> body;
+    private final int code;
+    private final String message;
+    private final Map<String, T> data;
 
     public static <T> ApiResponse<T> success(String name, T body) {
         Map<String, T> map = new HashMap<>();
         map.put(name, body);
 
-        return new ApiResponse(new ApiResponseHeader(SUCCESS, SUCCESS_MESSAGE), map);
+        return new ApiResponse(SUCCESS, SUCCESS_MESSAGE, map);
     }
 
     public static <T> ApiResponse<T> failCustomResponse(int headerCode, String headerMsg) {
-        return new ApiResponse(new ApiResponseHeader(headerCode, headerMsg), null);
+        return new ApiResponse(headerCode, headerMsg, null);
     }
 
     public static <T> ApiResponse<T> fail() {
-        return new ApiResponse(new ApiResponseHeader(FAILED, FAILED_MESSAGE), null);
+        return new ApiResponse(FAILED, FAILED_MESSAGE, null);
     }
 
     public static <T> ApiResponse<T> invalidAccessToken() {
-        return new ApiResponse(new ApiResponseHeader(FAILED, INVALID_ACCESS_TOKEN), null);
+        return new ApiResponse(FAILED, INVALID_ACCESS_TOKEN, null);
     }
 
     public static <T> ApiResponse<T> invalidRefreshToken() {
-        return new ApiResponse(new ApiResponseHeader(FAILED, INVALID_REFRESH_TOKEN), null);
+        return new ApiResponse(FAILED, INVALID_REFRESH_TOKEN, null);
     }
 
     public static <T> ApiResponse<T> notExpiredTokenYet() {
-        return new ApiResponse(new ApiResponseHeader(FAILED, NOT_EXPIRED_TOKEN_YET), null);
+        return new ApiResponse(FAILED, NOT_EXPIRED_TOKEN_YET, null);
     }
 }
