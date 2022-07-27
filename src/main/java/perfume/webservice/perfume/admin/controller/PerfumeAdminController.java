@@ -3,12 +3,10 @@ package perfume.webservice.perfume.admin.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import perfume.webservice.auth.common.ApiResponse;
+import perfume.webservice.perfume.admin.dto.FragranceSaveRequestDtoList;
 import perfume.webservice.perfume.admin.dto.PerfumeSaveRequestDtoList;
 import perfume.webservice.perfume.admin.service.PerfumeAdminService;
 import perfume.webservice.perfume.admin.dto.PerfumeSaveRequestDto;
-import perfume.webservice.perfume.common.repository.PerfumeRepository;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -19,14 +17,14 @@ public class PerfumeAdminController {
 
 
     @PostMapping("/perfume")
-    public ApiResponse savePerfume(@RequestBody PerfumeSaveRequestDtoList perfumeSaveRequestDto) {
-        return ApiResponse.success("data", perfumeAdminService.savePerfume(perfumeSaveRequestDto));
+    public ApiResponse savePerfume(@RequestBody PerfumeSaveRequestDtoList requestDto) {
+        return ApiResponse.success("data", perfumeAdminService.savePerfume(requestDto));
     }
 
-//    @PostMapping("/fragrance")
-//    public ApiResponse saveFragrance(@RequestBody PerfumeSaveRequestDto perfumeSaveRequestDto) {
-//        return ApiResponse.success("data", perfumeAdminService.saveFragrance(perfumeSaveRequestDto));
-//    }
+    @PostMapping("/fragrance")
+    public ApiResponse saveFragrance(@RequestBody FragranceSaveRequestDtoList requestDto) {
+        return ApiResponse.success("data", perfumeAdminService.saveFragrance(requestDto));
+    }
 
 
     @PostMapping("/perfume/{id}")

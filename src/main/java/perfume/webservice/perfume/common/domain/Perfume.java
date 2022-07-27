@@ -49,6 +49,20 @@ public class Perfume extends BaseTimeEntity {
 
     }
 
+    public void update(String name, String description, List<FragranceGroup> fragranceGroup) {
+        this.name = name;
+        this.description = description;
+        if (fragranceGroup == null) {
+            this.fragranceGroup = new ArrayList<>();
+        } else{
+            for (FragranceGroup fragrance : fragranceGroup) {
+                this.addFragrance(fragrance);
+            }
+        }
+
+
+    }
+
 
 
 }

@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PerfumeSaveRequestDto {
 
+    private Long id;
     private String name;
     private String description;
 
