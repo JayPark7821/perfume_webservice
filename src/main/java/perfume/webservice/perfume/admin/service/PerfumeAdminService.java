@@ -2,6 +2,11 @@ package perfume.webservice.perfume.admin.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import perfume.webservice.perfume.admin.dto.*;
@@ -12,10 +17,7 @@ import perfume.webservice.perfume.common.repository.FragranceGroupRepository;
 import perfume.webservice.perfume.common.repository.FragranceRepository;
 import perfume.webservice.perfume.common.repository.PerfumeRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,24 +29,30 @@ public class PerfumeAdminService {
     private final PerfumeRepository perfumeRepository;
     private final FragranceRepository fragranceRepository;
     private final FragranceGroupRepository fragranceGroupRepository;
+    private final MessageSource msg;
+
 
     @Transactional
-    public List<Long> savePerfume(PerfumeSaveRequestDtoList requestDto) {
-        List<Long> ids = new ArrayList<>();
+    public Map<String, Object> savePerfume(PerfumeSaveRequestDtoList requestDto) {
+
+        List<Long> insertedIds = new ArrayList<>();
+        List<Long> updatedIds = new ArrayList<>();
         for (PerfumeSaveRequestDto perfumeSaveRequestDto : requestDto.getPerfumeSaveList()) {
             Long saveRequestId = perfumeSaveRequestDto.getId();
 
             if ( saveRequestId == null) {
                 Perfume perfume = perfumeRepository.save(perfumeSaveRequestDto.toEntity());
                 saveFragranceMapping(perfumeSaveRequestDto, perfume, false);
-                ids.add(perfume.getId());
+                insertedIds.add(perfume.getId());
+
             } else {
                 Perfume perfume = perfumeRepository.findById(saveRequestId)
                         .orElseThrow(() -> new IllegalArgumentException("없는 향수 입니다."));
                 saveFragranceMapping(perfumeSaveRequestDto, perfume, true);
+                updatedIds.add(perfume.getId());
             }
         }
-        return ids;
+        return  Map.of("inserted",insertedIds , "updated", updatedIds , "totalCount", (long) (updatedIds.size() + insertedIds.size()));
     }
 
     private void saveFragranceMapping(PerfumeSaveRequestDto perfumeSaveRequestDto, Perfume perfume, boolean isUpdate) {
@@ -93,15 +101,10 @@ public class PerfumeAdminService {
     }
 
 
+    public Page<PerfumeResponseDto> findAllPageDesc(int page) {
+        return perfumeRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id")))
+                .map(perfume -> new PerfumeResponseDto(perfume));
 
-    @Transactional(readOnly = true)
-    public List<PerfumeResponseDto> findAllDesc() {
-        return perfumeRepository.findAllDesc().stream()
-                .map(PerfumeResponseDto::new)
-                .collect(Collectors.toList());
     }
 
-
-//    public Object findById(Long id) {
-//    }
 }
