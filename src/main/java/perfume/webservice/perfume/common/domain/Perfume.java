@@ -1,5 +1,6 @@
 package perfume.webservice.perfume.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public class Perfume extends BaseTimeEntity {
     @Column(name = "perfume_desc")
     private String description;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "perfume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FragranceGroup> fragranceGroup = new ArrayList<>();
 
