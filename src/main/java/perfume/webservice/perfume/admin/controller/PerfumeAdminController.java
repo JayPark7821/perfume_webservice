@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-@Validated
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class PerfumeAdminController {
     public ApiResponse<Map<String, Object>> savePerfume(@RequestBody @Valid PerfumeSaveRequestDtoList requestDto, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()){
-            log.info("---------------------- BINDING ERROR --------------------------");
+            log.info("---------------------- SAVE PERFUME BINDING ERROR --------------------------");
             return ApiResponse.fail();
         }
         return ApiResponse.success("data", perfumeAdminService.savePerfume(requestDto));
@@ -40,7 +39,7 @@ public class PerfumeAdminController {
     @PostMapping("/fragrance")
     public ApiResponse<List<Long>> saveFragrance(@Valid @RequestBody FragranceSaveRequestDtoList requestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
-            log.info("---------------------- BINDING ERROR --------------------------");
+            log.info("---------------------- SAVE FRAGRANCE BINDING ERROR --------------------------");
             return ApiResponse.fail();
         }
         return ApiResponse.success("data", perfumeAdminService.saveFragrance(requestDto));

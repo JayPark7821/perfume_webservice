@@ -2,6 +2,7 @@ package perfume.webservice.auth.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,10 +12,12 @@ import java.util.Map;
 public class ApiResponse<T> {
 
     private final static int SUCCESS = 200;
-    private final static int NOT_FOUND = 400;
+    private final static int BAD_REQUEST = 400;
     private final static int FAILED = 500;
     private final static String SUCCESS_MESSAGE = "SUCCESS";
     private final static String NOT_FOUND_MESSAGE = "NOT FOUND";
+
+    private final static String BAD_REQUEST_MESSAGE = "서버에서 오류가 발생하였습니다.";
     private final static String FAILED_MESSAGE = "서버에서 오류가 발생하였습니다.";
     private final static String INVALID_ACCESS_TOKEN = "Invalid access token.";
     private final static String INVALID_REFRESH_TOKEN = "Invalid refresh token.";
@@ -37,6 +40,10 @@ public class ApiResponse<T> {
 
     public static <T> ApiResponse<T> fail() {
         return new ApiResponse(FAILED, FAILED_MESSAGE, null);
+    }
+
+    public static <T> ApiResponse<T> bindingFail() {
+        return new ApiResponse(BAD_REQUEST, BAD_REQUEST_MESSAGE, null);
     }
 
     public static <T> ApiResponse<T> invalidAccessToken() {

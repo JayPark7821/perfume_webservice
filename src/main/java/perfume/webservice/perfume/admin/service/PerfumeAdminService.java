@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import perfume.webservice.common.exception.CustomIllegalArgumentException;
+import perfume.webservice.common.exception.ExceptionType;
 import perfume.webservice.perfume.admin.dto.*;
 import perfume.webservice.perfume.common.domain.Fragrance;
 import perfume.webservice.perfume.common.domain.FragranceGroup;
@@ -47,7 +49,7 @@ public class PerfumeAdminService {
 
             } else {
                 Perfume perfume = perfumeRepository.findById(saveRequestId)
-                        .orElseThrow(() -> new IllegalArgumentException("없는 향수 입니다."));
+                        .orElseThrow(() -> new CustomIllegalArgumentException(ExceptionType.PERFUME_NOT_FOUND, saveRequestId));
                 saveFragranceMapping(perfumeSaveRequestDto, perfume, true);
                 updatedIds.add(perfume.getId());
             }
@@ -61,10 +63,15 @@ public class PerfumeAdminService {
                                                     .filter(Objects::nonNull)
                                                     .collect(Collectors.toList());
 
-        List<Fragrance> fragrances = fragranceRepository.findByNames(fragIds);
+        List<Fragrance> fragrances = fragranceRepository.findByIds(fragIds);
 
+
+        if(fragranceDtos.size() != fragIds.stream().distinct().count()){
+            throw new CustomIllegalArgumentException(ExceptionType.DUPLI_FRAGRANCE, perfume.getId());
+        }
         if (fragIds.size() != fragrances.size()) {
-            throw new IllegalArgumentException("없는 향입니다.");
+            fragIds.removeAll(fragrances.stream().map(Fragrance::getId).collect(Collectors.toList()));
+            throw new CustomIllegalArgumentException(ExceptionType.FRAGRANCE_NOT_FOUND, fragIds);
         }
 
         List<FragranceGroup> fragranceGroupList = new ArrayList<>();
@@ -75,8 +82,9 @@ public class PerfumeAdminService {
                     .perfume(perfume)
                     .containPercentage(fragranceDtos.stream()
                             .filter(f -> fragrance.getId().equals(f.getId()))
-                            .findAny()
-                            .orElseThrow(() -> new IllegalArgumentException("함유 퍼센트가 없습니다.")).getPercentage())
+                            .filter(f -> f.getPercentage() > 0)
+                            .findFirst()
+                            .orElseThrow(() -> new CustomIllegalArgumentException(ExceptionType.CONTENT_NOT_FOUND, fragrance.getFragranceName())).getPercentage())
                     .build());
         }
         if (isUpdate) {

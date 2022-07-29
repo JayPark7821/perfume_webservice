@@ -11,7 +11,7 @@ import java.util.List;
 public interface FragranceRepository extends JpaRepository<Fragrance, Long> {
 
     @Query("select f from Fragrance f where f.id in :ids")
-    List<Fragrance> findByNames(@Param("ids") Collection<Long> ids);
+    List<Fragrance> findByIds(@Param("ids") Collection<Long> ids);
 
 
 }
