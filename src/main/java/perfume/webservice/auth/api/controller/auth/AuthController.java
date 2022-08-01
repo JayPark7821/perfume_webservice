@@ -19,6 +19,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import perfume.webservice.common.exception.CustomAuthTokenException;
+import perfume.webservice.common.exception.ResponseMsgType;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -97,7 +99,8 @@ public class AuthController {
         // expired access token 인지 확인
         Claims claims = authToken.getExpiredTokenClaims();
         if (claims == null) {
-            return ApiResponse.notExpiredTokenYet();
+            throw new CustomAuthTokenException(ResponseMsgType.NOT_EXPIRED_TOKEN_YET);
+
         }
 
         String userId = claims.getSubject();
@@ -110,13 +113,13 @@ public class AuthController {
         AuthToken authRefreshToken = tokenProvider.convertAuthToken(refreshToken);
 
         if (!authRefreshToken.validate(request)) {
-            return ApiResponse.invalidRefreshToken();
+            throw new CustomAuthTokenException(ResponseMsgType.INVALID_TOKEN, "Refresh");
         }
 
         // userId refresh token 으로 DB 확인
         UserRefreshToken userRefreshToken = userRefreshTokenRepository.findByUserIdAndRefreshToken(userId, refreshToken);
         if (userRefreshToken == null) {
-            return ApiResponse.invalidRefreshToken();
+            throw new CustomAuthTokenException(ResponseMsgType.INVALID_TOKEN, "Refresh");
         }
 
         Date now = new Date();
