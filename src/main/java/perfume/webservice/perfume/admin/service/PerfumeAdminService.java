@@ -2,7 +2,6 @@ package perfume.webservice.perfume.admin.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import perfume.webservice.common.exception.CustomIllegalArgumentException;
-import perfume.webservice.common.exception.ExceptionType;
+import perfume.webservice.common.exception.ResponseMsgType;
 import perfume.webservice.perfume.admin.dto.*;
 import perfume.webservice.perfume.common.domain.Fragrance;
 import perfume.webservice.perfume.common.domain.FragranceGroup;
@@ -31,7 +30,7 @@ public class PerfumeAdminService {
     private final PerfumeRepository perfumeRepository;
     private final FragranceRepository fragranceRepository;
     private final FragranceGroupRepository fragranceGroupRepository;
-    private final MessageSource msg;
+
 
 
     @Transactional
@@ -39,6 +38,7 @@ public class PerfumeAdminService {
 
         List<Long> insertedIds = new ArrayList<>();
         List<Long> updatedIds = new ArrayList<>();
+
         for (PerfumeSaveRequestDto perfumeSaveRequestDto : requestDto.getPerfumeSaveList()) {
             Long saveRequestId = perfumeSaveRequestDto.getId();
 
@@ -49,7 +49,7 @@ public class PerfumeAdminService {
 
             } else {
                 Perfume perfume = perfumeRepository.findById(saveRequestId)
-                        .orElseThrow(() -> new CustomIllegalArgumentException(ExceptionType.PERFUME_NOT_FOUND, saveRequestId));
+                        .orElseThrow(() -> new CustomIllegalArgumentException(ResponseMsgType.PERFUME_NOT_FOUND, saveRequestId));
                 saveFragranceMapping(perfumeSaveRequestDto, perfume, true);
                 updatedIds.add(perfume.getId());
             }
@@ -67,11 +67,11 @@ public class PerfumeAdminService {
 
 
         if(fragranceDtos.size() != fragIds.stream().distinct().count()){
-            throw new CustomIllegalArgumentException(ExceptionType.DUPLI_FRAGRANCE, perfume.getId());
+            throw new CustomIllegalArgumentException(ResponseMsgType.DUPLI_FRAGRANCE, perfume.getId());
         }
         if (fragIds.size() != fragrances.size()) {
             fragIds.removeAll(fragrances.stream().map(Fragrance::getId).collect(Collectors.toList()));
-            throw new CustomIllegalArgumentException(ExceptionType.FRAGRANCE_NOT_FOUND, fragIds);
+            throw new CustomIllegalArgumentException(ResponseMsgType.FRAGRANCE_NOT_FOUND, fragIds);
         }
 
         List<FragranceGroup> fragranceGroupList = new ArrayList<>();
@@ -84,7 +84,7 @@ public class PerfumeAdminService {
                             .filter(f -> fragrance.getId().equals(f.getId()))
                             .filter(f -> f.getPercentage() > 0)
                             .findFirst()
-                            .orElseThrow(() -> new CustomIllegalArgumentException(ExceptionType.CONTENT_NOT_FOUND, fragrance.getFragranceName())).getPercentage())
+                            .orElseThrow(() -> new CustomIllegalArgumentException(ResponseMsgType.CONTENT_NOT_FOUND, fragrance.getFragranceName())).getPercentage())
                     .build());
         }
         if (isUpdate) {

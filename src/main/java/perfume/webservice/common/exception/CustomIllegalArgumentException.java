@@ -6,16 +6,16 @@ public class CustomIllegalArgumentException extends RuntimeException{
 
     private final String param;
 
-    public CustomIllegalArgumentException(ExceptionType et, Long id) {
+    public CustomIllegalArgumentException(ResponseMsgType et, Long id) {
         super(et.getMsg());
         this.param = Long.toString(id) ;
     }
-    public CustomIllegalArgumentException(ExceptionType et, List<Long> ids) {
+    public CustomIllegalArgumentException(ResponseMsgType et, List<Long> ids) {
         super(et.getMsg());
         this.param = ids.toString();
     }
 
-    public CustomIllegalArgumentException(ExceptionType et, String name) {
+    public CustomIllegalArgumentException(ResponseMsgType et, String name) {
         super(et.getMsg());
         this.param = name;
     }
