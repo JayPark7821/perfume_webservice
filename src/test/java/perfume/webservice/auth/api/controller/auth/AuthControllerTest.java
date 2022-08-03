@@ -11,11 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import perfume.webservice.auth.api.entity.auth.AuthReqModel;
 import perfume.webservice.auth.api.entity.user.User;
@@ -37,19 +37,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@Transactional
 class AuthControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
-
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public MockMvc mvc;
 
@@ -71,7 +69,7 @@ class AuthControllerTest {
     private Map<String,String> getTokensFromMvcResult(MvcResult result) throws JsonProcessingException, UnsupportedEncodingException {
 
         Map<String, Object> resultBody = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<Map<String, Object>>() {});
-        Map<String, String> body = (Map<String, String>) resultBody.get("body");
+        Map<String, String> body = (Map<String, String>) resultBody.get("data");
 
         Optional<Cookie> refresh_token = Arrays.stream(result.getResponse().getCookies())
                 .filter(c -> c.getName().equals("refresh_token")).findAny();
@@ -82,27 +80,15 @@ class AuthControllerTest {
         return Map.of("token", token, "refreshToken", refreshToken);
     }
 
-    @BeforeTestClass
-    void before() {
-
-//        @NotNull @Size(max = 64) String userId,
-//        @NotNull @Size(max = 100) String username,
-//        @NotNull @Size(max = 512) String email,
-//        @NotNull @Size(max = 1) String emailVerifiedYn,
-//        @Size(max = 512) String profileImageUrl,
-//        ProviderType providerType,
-//        @NotNull RoleType roleType,
-//        @NotNull LocalDateTime createdAt,
-//        @NotNull LocalDateTime modifiedAt,
-//        @NotNull String password
-        userRepository.save(new User("testId", "testUser", "test@test.com", "Y", "~~~",
-                ProviderType.valueOf("LOCAL"), RoleType.USER, LocalDateTime.now(), LocalDateTime.now(),
-                passwordEncoder.encode("test")));
-    }
 
     @BeforeEach
     void setup() {
-
+        User testId = userRepository.findByUserId("testId");
+        if (testId == null) {
+            userRepository.save(new User("testId", "testUser", "test@test.com", "Y", "~~~",
+                    ProviderType.valueOf("LOCAL"), RoleType.USER, LocalDateTime.now(), LocalDateTime.now(),
+                    passwordEncoder.encode("test")));
+        }
         DefaultMockMvcBuilder builder = MockMvcBuilders
                 .webAppContextSetup(this.wac)
                 .apply(SecurityMockMvcConfigurers.springSecurity())
@@ -145,7 +131,7 @@ class AuthControllerTest {
 
         //when
         MvcResult result = requestMvc(bodyContent, loginUrl);
-
+        System.out.println("result = " + result.getResponse().getContentAsString());
         //then
         assertThat(result.getResponse().getContentAsString()).contains("SUCCESS");
         assertThat(result.getResponse().getContentAsString()).contains("token");
@@ -164,7 +150,7 @@ class AuthControllerTest {
         //then
         Map<String, Object> resultBody = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<Map<String, Object>>() {
         });
-        Map<String, String> body = (Map<String, String>) resultBody.get("body");
+        Map<String, String> body = (Map<String, String>) resultBody.get("data");
         Optional<Cookie> refresh_token = Arrays.stream(result.getResponse().getCookies())
                 .filter(c -> c.getName().equals("refresh_token")).findAny();
 
@@ -194,8 +180,9 @@ class AuthControllerTest {
         String bodyContent = getLoginForm("test@test.com", "test");
         //when
         MvcResult result = requestMvc(bodyContent, loginUrl);
+        System.out.println("result.getResponse().getContentAsString() = " + result.getResponse().getContentAsString());
         Map<String, String> firstTokens = getTokensFromMvcResult(result);
-
+        System.out.println("firstTokens = " + firstTokens);
         MvcResult mvcResult = this.mvc.perform(get(homeUrl)
                 .header("Origin", "http://localhost:3000")
                 .header("Authorization", "Bearer " + firstTokens.get("token"))
