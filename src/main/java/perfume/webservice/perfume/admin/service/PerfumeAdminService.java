@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,9 @@ import perfume.webservice.perfume.common.domain.FragranceGroup;
 import perfume.webservice.perfume.common.domain.Perfume;
 import perfume.webservice.perfume.common.repository.FragranceGroupRepository;
 import perfume.webservice.perfume.common.repository.FragranceRepository;
+import perfume.webservice.perfume.common.repository.PerfumeQueryRepository;
 import perfume.webservice.perfume.common.repository.PerfumeRepository;
+import perfume.webservice.perfume.common.searchcondition.PerfumeSearchCondition;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,6 +33,7 @@ public class PerfumeAdminService {
     private final PerfumeRepository perfumeRepository;
     private final FragranceRepository fragranceRepository;
     private final FragranceGroupRepository fragranceGroupRepository;
+    private final PerfumeQueryRepository perfumeQueryRepository;
 
 
 
@@ -109,9 +113,12 @@ public class PerfumeAdminService {
     }
 
 
-    public Page<PerfumeResponseDto> findAllPageDesc(int page) {
-        return perfumeRepository.findAll(PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "id")))
-                .map(perfume -> new PerfumeResponseDto(perfume));
+    public Page<PerfumeResponseDto> findAllPageDesc(PerfumeSearchCondition condition, Pageable pageable) {
+//        Page<Perfume> results = perfumeQueryRepository.searchPerfumesWithCondition(condition, PageRequest.of(page, 10))
+        Page<Perfume> results = perfumeQueryRepository.searchPerfumesWithCondition(condition, pageable);
+        return results.map(perfume -> new PerfumeResponseDto(perfume));
+
+//
 
     }
 

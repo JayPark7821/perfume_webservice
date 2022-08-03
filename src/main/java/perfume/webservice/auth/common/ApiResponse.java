@@ -2,6 +2,7 @@ package perfume.webservice.auth.common;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class ApiResponse<T> {
     private final String message;
     private final Map<String, T> data;
 
+
     private ApiResponse(int code, String message, Map<String, T> data) {
         this.code = code;
         this.message = message;
@@ -24,7 +26,7 @@ public class ApiResponse<T> {
         Map<String, T> map = new HashMap<>();
         map.put(name, body);
 
-        return new ApiResponse(200, "SUCCESS", map);
+        return new ApiResponse(HttpStatus.OK.value(), "SUCCESS", map);
     }
 
     public static <T> ApiResponse<T> failResponse(int headerCode, String headerMsg) {

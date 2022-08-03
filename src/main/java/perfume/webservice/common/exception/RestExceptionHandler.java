@@ -24,29 +24,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(CustomIllegalArgumentException.class)
-    protected ResponseEntity<Object> handleCustomIllegalArgumentException(CustomIllegalArgumentException ex) {
+    public ResponseEntity<Object> handleCustomIllegalArgumentException(CustomIllegalArgumentException ex) {
         String message = messageSource.getMessage(ex.getLocalizedMessage(), new Object[]{ex.getParam()}, null);
         ApiResponse<Object> apiResponse = ApiResponse.failResponse(HttpStatus.BAD_REQUEST.value(),message);
         return buildResponseEntity(apiResponse);
     }
 
     @ExceptionHandler(CustomAuthTokenException.class)
-    protected ResponseEntity<Object> handleCustomAuthTokenException(CustomAuthTokenException ex) {
+    public ResponseEntity<Object> handleCustomAuthTokenException(CustomAuthTokenException ex) {
         String message = messageSource.getMessage(ex.getLocalizedMessage(), new Object[]{ex.getParam()}, null);
         ApiResponse<Object> apiResponse = ApiResponse.failResponse(HttpStatus.FORBIDDEN.value(), message);
         return buildResponseEntity(apiResponse);
     }
 
     @ExceptionHandler(CustomBindingException.class)
-    protected ResponseEntity<Object> handleCustomBindingException(CustomBindingException ex) {
+    public ResponseEntity<Object> handleCustomBindingException(CustomBindingException ex) {
         String message = messageSource.getMessage(ex.getLocalizedMessage(), new Object[]{ex.getParam()}, null);
         ApiResponse<Object> apiResponse = ApiResponse.failResponse(HttpStatus.BAD_REQUEST.value(), message);
         return buildResponseEntity(apiResponse);
     }
 
-    @ExceptionHandler(value = {BadCredentialsException.class})
-    public ApiResponse handleBadCredentialsException(BadCredentialsException e) {
-        return ApiResponse.failResponse(HttpStatus.FORBIDDEN.value(), e.getLocalizedMessage());
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+        ApiResponse<Object> apiResponse = ApiResponse.failResponse(HttpStatus.FORBIDDEN.value(), ex.getLocalizedMessage());
+        return buildResponseEntity(apiResponse);
     }
 
 }

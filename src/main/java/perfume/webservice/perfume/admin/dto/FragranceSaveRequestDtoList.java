@@ -1,5 +1,6 @@
 package perfume.webservice.perfume.admin.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,4 +12,11 @@ import java.util.List;
 public class FragranceSaveRequestDtoList {
     @Valid
     private List<FragranceSaveRequestDto> fragranceSaveList;
+
+    @Builder
+    FragranceSaveRequestDtoList(List<FragranceSaveRequestDto> fragranceSaveList) {
+        this.fragranceSaveList = fragranceSaveList;
+
+    }
+
 }

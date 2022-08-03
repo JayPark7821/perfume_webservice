@@ -1,14 +1,18 @@
 package perfume.webservice.auth.oauth.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.web.servlet.mvc.condition.MediaTypeExpression;
 import perfume.webservice.auth.common.ApiResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import perfume.webservice.auth.oauth.entity.AuthExceptionType;
 
@@ -29,8 +33,8 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         log.info("Responding with unauthorized error. Message := {}", authException.getMessage());
         String result = objectMapper.writeValueAsString(
                 ApiResponse.failResponse(HttpServletResponse.SC_UNAUTHORIZED, exception.getDisplayName()));
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.getWriter().write(result);
 
 //        authException.printStackTrace();
