@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import perfume.webservice.auth.common.ApiResponse;
-import perfume.webservice.perfume.admin.dto.FragranceSaveRequestDtoList;
-import perfume.webservice.perfume.admin.dto.PerfumeResponseDto;
-import perfume.webservice.perfume.admin.dto.PerfumeSaveRequestDtoList;
+import perfume.webservice.common.exception.CustomBindingException;
+import perfume.webservice.common.exception.ResponseMsgType;
+import perfume.webservice.perfume.admin.dto.*;
 import perfume.webservice.perfume.admin.service.PerfumeAdminService;
-import perfume.webservice.perfume.admin.dto.PerfumeSaveRequestDto;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -30,8 +28,8 @@ public class PerfumeAdminController {
     public ApiResponse<Map<String, Object>> savePerfume(@RequestBody @Valid PerfumeSaveRequestDtoList requestDto, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()){
-            log.info("---------------------- SAVE PERFUME BINDING ERROR --------------------------");
-            return ApiResponse.fail();
+            log.debug("---------------------- SAVE PERFUME BINDING ERROR --------------------------");
+            throw new CustomBindingException(ResponseMsgType.BINDING_ERROR_PERFUME);
         }
         return ApiResponse.success("data", perfumeAdminService.savePerfume(requestDto));
     }
@@ -39,8 +37,8 @@ public class PerfumeAdminController {
     @PostMapping("/fragrance")
     public ApiResponse<List<Long>> saveFragrance(@Valid @RequestBody FragranceSaveRequestDtoList requestDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()){
-            log.info("---------------------- SAVE FRAGRANCE BINDING ERROR --------------------------");
-            return ApiResponse.fail();
+            log.debug("---------------------- SAVE FRAGRANCE BINDING ERROR --------------------------");
+            throw new CustomBindingException(ResponseMsgType.BINDING_ERROR_FRAGRANCE);
         }
         return ApiResponse.success("data", perfumeAdminService.saveFragrance(requestDto));
     }

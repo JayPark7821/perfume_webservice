@@ -20,7 +20,8 @@ public class PerfumeSaveRequestDto {
     @Valid
     @NotNull
     private String description;
-
+    @Valid
+    @NotNull
     private List<FragranceGroupSaveDto> fragrance;
 
     public Perfume toEntity() {
