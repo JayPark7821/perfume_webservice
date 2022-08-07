@@ -9,6 +9,7 @@ server:
 
 
 spring:
+
   h2:
     console:
       enabled: true
@@ -24,6 +25,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+        use_sql_comments: true
 
   security:
     oauth2:
@@ -35,6 +37,26 @@ spring:
             scope:
               - email
               - profile
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  #springdoc:
+  #  default-consumes-media-type: application/json
+  #  default-produces-media-type: application/json
+  #  swagger-ui:
+  #    path: /swagger-ui.html
+  #    disable-swagger-default-url: true
+  #    display-query-params-without-oauth2: true
+
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    path: swagger.html
+    disable-swagger-default-url: true
+  paths-to-match:
+    - /api/**
 
 cors:
   allowed-origins: 'http://localhost:3000'

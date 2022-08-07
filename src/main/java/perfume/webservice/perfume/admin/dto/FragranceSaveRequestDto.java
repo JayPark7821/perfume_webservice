@@ -1,43 +1,43 @@
 package perfume.webservice.perfume.admin.dto;
 
+import java.util.List;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import perfume.webservice.perfume.common.domain.Fragrance;
-import perfume.webservice.perfume.common.domain.Perfume;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
 public class FragranceSaveRequestDto {
 
-    private String id;
-    @Valid
-    @NotNull
-    private String name;
-    @Valid
-    @NotNull
-    private String desc;
+	@Schema(description = "향 id")
+	private Long id;
+	@Valid
+	@NotNull
+	@Schema(description = "향 명칭", example = "향의 명칭", required = true)
+	private String name;
+	@Valid
+	@NotNull
+	@Schema(description = "향 설명", example = "향의 설명", required = true)
+	private String desc;
 
+	@Builder
+	FragranceSaveRequestDto(String name, String desc, List<FragranceGroupSaveDto> fragranceList) {
+		this.name = name;
+		this.desc = desc;
 
-    @Builder
-    FragranceSaveRequestDto(String name , String desc, List<FragranceGroupSaveDto> fragranceList) {
-        this.name = name;
-        this.desc = desc;
+	}
 
-    }
-
-
-    public Fragrance toEntity() {
-        return Fragrance.builder()
-                .fragranceName(name)
-                .fragranceDesc(desc)
-                .build();
-    }
+	public Fragrance toEntity() {
+		return Fragrance.builder()
+			.name(name)
+			.description(desc)
+			.build();
+	}
 
 }
