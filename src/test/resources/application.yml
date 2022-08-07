@@ -9,23 +9,21 @@ server:
 
 
 spring:
-
   h2:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:tcp://localhost/~/webservice
+    url: jdbc:h2:tcp://localhost/~/webserviceTest
     username: sa
     password:
 
   jpa:
     hibernate:
-      ddl-auto: update #none
+      ddl-auto: create #none
     properties:
       hibernate:
         show_sql: true
         format_sql: true
-        use_sql_comments: true
 
   security:
     oauth2:
@@ -37,26 +35,6 @@ spring:
             scope:
               - email
               - profile
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
-  #springdoc:
-  #  default-consumes-media-type: application/json
-  #  default-produces-media-type: application/json
-  #  swagger-ui:
-  #    path: /swagger-ui.html
-  #    disable-swagger-default-url: true
-  #    display-query-params-without-oauth2: true
-
-springdoc:
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  swagger-ui:
-    path: swagger.html
-    disable-swagger-default-url: true
-  paths-to-match:
-    - /api/**
 
 cors:
   allowed-origins: 'http://localhost:3000'

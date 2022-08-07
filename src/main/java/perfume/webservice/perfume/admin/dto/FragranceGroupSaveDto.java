@@ -1,19 +1,34 @@
 package perfume.webservice.perfume.admin.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
 public class FragranceGroupSaveDto {
-    @Valid
-    @NotNull
-    private Long id;
-    @Valid
-    @NotNull
-    private int percentage;
+	@Valid
+	@NotNull
+	@Schema(example = "향 id")
+	private Long id;
+	@Valid
+	@NotNull
+	@Max(100)
+	@Min(0)
+	@Schema(example = "해당향 함량 ex) 100")
+	private int percentage;
+
+	@Builder
+	FragranceGroupSaveDto(Long id, int percentage) {
+		this.id = id;
+		this.percentage = percentage;
+
+	}
 
 }
