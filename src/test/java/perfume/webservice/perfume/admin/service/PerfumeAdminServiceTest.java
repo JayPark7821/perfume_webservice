@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
-import perfume.webservice.perfume.common.domain.Fragrance;
-import perfume.webservice.perfume.common.domain.FragranceGroup;
-import perfume.webservice.perfume.common.domain.Perfume;
-import perfume.webservice.perfume.common.repository.FragranceGroupRepository;
-import perfume.webservice.perfume.common.repository.FragranceRepository;
-import perfume.webservice.perfume.common.repository.PerfumeRepository;
+import perfume.webservice.perfume.domain.entity.Fragrance;
+import perfume.webservice.perfume.domain.entity.FragranceGroup;
+import perfume.webservice.perfume.domain.entity.Perfume;
+import perfume.webservice.perfume.repository.FragranceGroupRepository;
+import perfume.webservice.perfume.repository.FragranceRepository;
+import perfume.webservice.perfume.repository.PerfumeRepository;
 
 @SpringBootTest
 @Rollback(value = false)
