@@ -16,9 +16,10 @@ public enum ResponseMsgType {
     BINDING_ERROR_PERFUME("binding.error.perfume"),
     BINDING_ERROR_FRAGRANCE("binding.error.fragrance"),
     BINDING_ERROR_KEYWORD("binding.error.keyword"),
-    CONTENT_NOT_FOUND("notFound.content"),
+    CONTAIN_PERCENTAGE_NOT_FOUND("notFound.containPercentage"),
     DUPLI_FRAGRANCE("notAllow.dupliFragrance"),
-    BINDING_FAILED_SAVE("binding.fail");
+    BINDING_FAILED_SAVE("binding.fail"),
+    DUPLI_KEYWORD("notAllow.dupliKeyword");
 
 
 

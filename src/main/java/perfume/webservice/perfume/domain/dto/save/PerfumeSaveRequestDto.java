@@ -46,4 +46,10 @@ public class PerfumeSaveRequestDto {
 		this.keyword = keyword;
 	}
 
+	public Perfume toEntity() {
+		return Perfume.builder()
+				.name(name)
+				.description(description)
+				.build();
+	}
 }

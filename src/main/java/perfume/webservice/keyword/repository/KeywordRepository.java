@@ -1,6 +1,7 @@
 package perfume.webservice.keyword.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import perfume.webservice.keyword.domain.entity.KeywordMaster;
