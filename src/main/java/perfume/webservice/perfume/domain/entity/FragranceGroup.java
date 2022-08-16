@@ -27,10 +27,7 @@ public class FragranceGroup extends BaseTimeEntity {
     @JsonManagedReference
     private Fragrance fragrance;
 
-
     private int containPercentage;
-
-
 
     @Builder
     public FragranceGroup(Perfume perfume, Fragrance fragrance, int containPercentage) {

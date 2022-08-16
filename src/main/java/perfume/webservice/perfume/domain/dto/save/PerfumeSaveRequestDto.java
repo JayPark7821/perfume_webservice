@@ -38,13 +38,6 @@ public class PerfumeSaveRequestDto {
 	@NotNull
 	private List<Long> keyword;
 
-	@Builder
-    PerfumeSaveRequestDto(String name, String description, List<FragranceGroupSaveDto> fragranceGroup, List<Long> keyword) {
-		this.name = name;
-		this.description = description;
-		this.fragranceGroup = fragranceGroup;
-		this.keyword = keyword;
-	}
 
 	public Perfume toEntity() {
 		return Perfume.builder()

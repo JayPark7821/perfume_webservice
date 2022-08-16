@@ -24,12 +24,6 @@ public class FragranceSaveDto {
 	@Schema(description = "향 설명", example = "향의 설명", required = true)
 	private String desc;
 
-	@Builder
-	FragranceSaveDto(String name, String desc ) {
-		this.name = name;
-		this.desc = desc;
-	}
-
 	public Fragrance toEntity() {
 		return Fragrance.builder()
 			.name(name)

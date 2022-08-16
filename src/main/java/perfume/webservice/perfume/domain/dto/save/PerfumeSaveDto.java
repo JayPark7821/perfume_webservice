@@ -46,13 +46,13 @@ public class PerfumeSaveDto {
 		this.fragranceGroup = fragranceGroup;
 		this.keyword = keyword;
 	}
-
-	public Perfume toEntity() {
-		return Perfume.builder()
-				.name(name)
-				.description(description)
-				.fragranceGroup(fragranceGroup)
-				.perfumeKeyword(keyword)
-				.build();
-	}
+//
+//	public Perfume toEntity() {
+//		return Perfume.builder()
+//				.name(name)
+//				.description(description)
+//				.fragranceGroup(fragranceGroup)
+//				.perfumeKeyword(keyword)
+//				.build();
+//	}
 }
