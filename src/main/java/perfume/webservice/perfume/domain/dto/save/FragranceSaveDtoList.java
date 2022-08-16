@@ -13,10 +13,5 @@ public class FragranceSaveDtoList {
     @Valid
     private List<FragranceSaveDto> fragranceSaveList;
 
-    @Builder
-    FragranceSaveDtoList(List<FragranceSaveDto> fragranceSaveList) {
-        this.fragranceSaveList = fragranceSaveList;
-
-    }
 
 }

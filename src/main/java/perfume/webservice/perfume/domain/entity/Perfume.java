@@ -98,19 +98,6 @@ public class Perfume extends BaseTimeEntity {
                 this.addKeyword(perfumeKeyword);
             }
         }
-//
-//        this.setFragranceGroup(perfumeSaveDto.getFragranceGroup());
-//        this.setKeyword(perfumeSaveDto.getKeyword());
 
     }
-
-//
-//    public void updateKeyword(List<PerfumeKeyword> perfumeKeyword) {
-//        for (PerfumeKeyword keyword : perfumeKeyword) {
-//            this.addKeyword(keyword);
-//        }
-//    }
-
-
-
 }

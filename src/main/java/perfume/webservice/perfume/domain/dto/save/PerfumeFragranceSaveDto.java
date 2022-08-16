@@ -22,18 +22,5 @@ public class PerfumeFragranceSaveDto {
 	@Schema(description = "향 함유량", example = "향 함유량", required = true)
 	private int percentage;
 
-	@Builder
-	PerfumeFragranceSaveDto(Long perfumeId, Long fragranceId, int percentage) {
-		this.fragranceId = fragranceId;
-		this.percentage = percentage;
-
-	}
-//
-//	public FragranceGroup toEntity() {
-//		return FragranceGroup.builder()
-//				.
-//			.description(desc)
-//			.build();
-//	}
 
 }

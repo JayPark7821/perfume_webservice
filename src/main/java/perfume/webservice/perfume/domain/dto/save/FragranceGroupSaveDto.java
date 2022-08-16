@@ -24,11 +24,6 @@ public class FragranceGroupSaveDto {
 	@Schema(example = "해당향 함량 ex) 100")
 	private int percentage;
 
-	@Builder
-	FragranceGroupSaveDto(Long id, int percentage) {
-		this.id = id;
-		this.percentage = percentage;
 
-	}
 
 }

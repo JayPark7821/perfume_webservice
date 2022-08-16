@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import perfume.webservice.common.dto.SavedResult;
 import perfume.webservice.common.exception.CustomIllegalArgumentException;
 import perfume.webservice.common.exception.ResponseMsgType;
+import perfume.webservice.common.utils.ParamValidator;
 import perfume.webservice.keyword.domain.entity.KeywordMaster;
 import perfume.webservice.keyword.repository.KeywordRepository;
 import perfume.webservice.perfume.domain.dto.response.FragranceResponseDto;
@@ -39,6 +40,7 @@ public class PerfumeAdminService {
 	private final KeywordRepository keywordRepository;
 	private final PerfumeKeywordRepository perfumeKeywordRepository;
 	private final PerfumeQueryRepository perfumeQueryRepository;
+	private final ParamValidator paramValidator;
 
 	@Transactional
 	public SavedResult savePerfume(PerfumeSaveRequestDtoList requestDto) {
@@ -71,14 +73,9 @@ public class PerfumeAdminService {
 				.collect(Collectors.toList());
 
 		List<KeywordMaster> keywords = keywordRepository.findByIds(perfumeSaveRequestDto.getKeyword());
-		// 중복 키워드
-		if (perfumeSaveRequestDto.getKeyword().size() != perfumeSaveRequestDto.getKeyword().stream().distinct().count()) {
-			throw new CustomIllegalArgumentException(ResponseMsgType.DUPLI_KEYWORD, perfume.getId());
-		}
-		// 등록x 키워드
-		if (keywords.size() != perfumeSaveRequestDto.getKeyword().size()) {
-			throw new CustomIllegalArgumentException(ResponseMsgType.KEYWORD_NOT_FOUND, perfume.getId());
-		}
+
+		paramValidator.validateDupliAndExsistParams(perfumeSaveRequestDto.getKeyword(),keywords.stream().map(KeywordMaster::getId).collect(Collectors.toList()), "KEYWORD");
+
 		List<PerfumeKeyword> perfumeKeywordList = keywords.stream()
 				.map(keyword -> PerfumeKeyword.builder()
 						.perfume(perfume)
@@ -88,15 +85,8 @@ public class PerfumeAdminService {
 
 
 		List<Fragrance> fragrances = fragranceRepository.findByIds(fragIds);
-		// 중복 향
-		if (fragranceGroupDtos.size() != fragIds.stream().distinct().count()) {
-			throw new CustomIllegalArgumentException(ResponseMsgType.DUPLI_FRAGRANCE, perfume.getId());
-		}
-		// 등록x 향
-		if (fragIds.size() != fragrances.size()) {
-			fragIds.removeAll(fragrances.stream().map(Fragrance::getId).collect(Collectors.toList()));
-			throw new CustomIllegalArgumentException(ResponseMsgType.FRAGRANCE_NOT_FOUND, fragIds);
-		}
+
+		paramValidator.validateDupliAndExsistParams(fragIds,fragrances.stream().map(Fragrance::getId).collect(Collectors.toList()), "FRAGRANCE");
 
 		List<FragranceGroup> fragranceGroupList = fragrances.stream()
 				.map(fragrance -> FragranceGroup.builder()

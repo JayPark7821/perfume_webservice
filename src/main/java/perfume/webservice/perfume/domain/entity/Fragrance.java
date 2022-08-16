@@ -22,7 +22,6 @@ import perfume.webservice.perfume.domain.dto.save.FragranceSaveDto;
 @Getter
 @NoArgsConstructor
 @Entity
-@ToString
 public class Fragrance extends BaseTimeEntity {
 
 	@Id
@@ -35,15 +34,6 @@ public class Fragrance extends BaseTimeEntity {
 
 	@Column(name = "fragrance_desc")
 	private String description;
-
-//	@JsonBackReference
-//	@OneToMany(mappedBy = "fragrance")
-//	private List<FragranceGroup> fragranceGroup = new ArrayList<>();
-
-//	public void addPerfume(FragranceGroup fragrance) {
-//		this.fragranceGroup.add(fragrance);
-//		fragrance.setFragranceRelation(this);
-//	}
 
 	public void update(FragranceSaveDto fragranceSaveDto) {
 		this.name = fragranceSaveDto.getName();
