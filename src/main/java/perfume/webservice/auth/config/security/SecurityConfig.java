@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 			.antMatchers("/api/auth/**").permitAll()
-			.antMatchers("/api/user/**").hasAnyAuthority(RoleType.USER.getCode())
+			.antMatchers("/api/user/**").hasAnyAuthority(RoleType.USER.getCode(),RoleType.ADMIN.getCode())
 			.antMatchers("/api/admin/**").hasAnyAuthority(RoleType.ADMIN.getCode())
 			.antMatchers("/").permitAll()
 			.antMatchers("/swagger-ui/**").permitAll()

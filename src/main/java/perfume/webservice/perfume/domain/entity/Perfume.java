@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import perfume.webservice.common.entity.BaseTimeEntity;
 import perfume.webservice.perfume.domain.dto.save.PerfumeSaveDto;
 
@@ -32,34 +33,33 @@ public class Perfume extends BaseTimeEntity {
     @OneToMany(mappedBy = "perfume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FragranceGroup> fragranceGroup = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "perfume", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PerfumeKeyword> perfumeKeyword = new ArrayList<>();
 
- 
-    public void addFragrance(Fragrance fragrance, int percentage) {
-        FragranceGroup fragraceGroup = FragranceGroup.builder()
-                .perfume(this)
-                .fragrance(fragrance)
-                .containPercentage(percentage)
-                .build();
 
-        this.fragranceGroup.add(fragraceGroup);
-        fragraceGroup.setPerfumeRelation(this);
+
+    public void addFragranceGroup(FragranceGroup fragranceGroup) {
+        this.fragranceGroup.add(fragranceGroup);
+        fragranceGroup.setPerfumeRelation(this);
     }
 
-    private void addKeyword(PerfumeKeyword perfumeKeyword) {
+
+    public void addKeyword(PerfumeKeyword perfumeKeyword) {
         this.perfumeKeyword.add(perfumeKeyword);
         perfumeKeyword.setPerfumeRelation(this);
     }
 
-    private void setKeyword(List<PerfumeKeyword> perfumeKeywords) {
-        this.perfumeKeyword = perfumeKeywords;
-        for (PerfumeKeyword keyword : perfumeKeywords) {
-            keyword.setPerfumeRelation(this);
+    public void setKeyword(List<PerfumeKeyword> perfumeKeywords) {
+        if (perfumeKeywords != null) {
+            this.perfumeKeyword = perfumeKeywords;
+            for (PerfumeKeyword keyword : perfumeKeywords) {
+                keyword.setPerfumeRelation(this);
+            }
         }
     }
 
-    private void setFragranceGroup(List<FragranceGroup> fragranceGroup) {
+    public void setFragranceGroup(List<FragranceGroup> fragranceGroup) {
         if (fragranceGroup != null) {
             this.fragranceGroup = fragranceGroup;
             for (FragranceGroup group : fragranceGroup) {
@@ -78,10 +78,29 @@ public class Perfume extends BaseTimeEntity {
     }
 
     public void update(PerfumeSaveDto perfumeSaveDto) {
-        this.name = name;
-        this.description = description;
-        this.setFragranceGroup(perfumeSaveDto.getFragranceGroup());
-        this.setKeyword(perfumeSaveDto.getKeyword());
+        this.name = perfumeSaveDto.getName();
+        this.description = perfumeSaveDto.getDescription();
+
+        this.perfumeKeyword.clear();
+        this.fragranceGroup.clear();
+
+        if (perfumeSaveDto.getFragranceGroup() == null) {
+            this.fragranceGroup = new ArrayList<>();
+        } else{
+            for (FragranceGroup fragranceGroup : perfumeSaveDto.getFragranceGroup()) {
+                this.addFragranceGroup(fragranceGroup);
+            }
+        }
+        if (perfumeSaveDto.getKeyword() == null) {
+            this.perfumeKeyword = new ArrayList<>();
+        } else{
+            for (PerfumeKeyword perfumeKeyword : perfumeSaveDto.getKeyword()) {
+                this.addKeyword(perfumeKeyword);
+            }
+        }
+//
+//        this.setFragranceGroup(perfumeSaveDto.getFragranceGroup());
+//        this.setKeyword(perfumeSaveDto.getKeyword());
 
     }
 

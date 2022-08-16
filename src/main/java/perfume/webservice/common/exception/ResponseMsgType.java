@@ -13,12 +13,21 @@ public enum ResponseMsgType {
     PERFUME_NOT_FOUND("notFound.perfume"),
     FRAGRANCE_NOT_FOUND("notFound.fragrance"),
     KEYWORD_NOT_FOUND("notFound.keyword"),
+    KEYWORDGROUP_NOT_FOUND("notFound.keywordGroup"),
+    CONTAIN_PERCENTAGE_NOT_FOUND("notFound.containPercentage"),
+    SUBCATEGORY_NOT_FOUND("notFound.subCategory"),
+
     BINDING_ERROR_PERFUME("binding.error.perfume"),
     BINDING_ERROR_FRAGRANCE("binding.error.fragrance"),
     BINDING_ERROR_KEYWORD("binding.error.keyword"),
-    CONTENT_NOT_FOUND("notFound.content"),
+    BINDING_ERROR_KEYWORDGROUP("binding.error.keywordGroup"),
+    BINDING_FAILED_SAVE("binding.fail"),
+    DUPLI_KEYWORD("notAllow.dupliKeyword"),
     DUPLI_FRAGRANCE("notAllow.dupliFragrance"),
-    BINDING_FAILED_SAVE("binding.fail");
+
+    CATEGORY_NOT_FOUND("notFound.category"),
+
+    BINDING_ERROR_CATEGORY("binding.error.category");
 
 
 

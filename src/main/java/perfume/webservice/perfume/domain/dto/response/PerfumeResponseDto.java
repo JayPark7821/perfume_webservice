@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import perfume.webservice.perfume.domain.entity.FragranceGroup;
 import perfume.webservice.perfume.domain.entity.Perfume;
+import perfume.webservice.perfume.domain.entity.PerfumeKeyword;
 
 @Getter
 public class PerfumeResponseDto {
@@ -20,9 +21,17 @@ public class PerfumeResponseDto {
 
 	private List<FragranceGroupResponseDto> fragranceGroupResponseDtoList = new ArrayList<>();
 
+	private List<PerfumeKeywordsResponseDto> perfumeKeywordsResponseDtoList = new ArrayList<>();
+
+
 	public void addFragranceGroupResponseDto(FragranceGroupResponseDto fragrance) {
 		this.fragranceGroupResponseDtoList.add(fragrance);
 	}
+
+	public void addKeywordsResponseDto(PerfumeKeywordsResponseDto keyword) {
+		this.perfumeKeywordsResponseDtoList.add(keyword);
+	}
+
 
 	public PerfumeResponseDto(Perfume entity) {
 		this.id = entity.getId();
@@ -33,6 +42,13 @@ public class PerfumeResponseDto {
 		} else {
 			for (FragranceGroup fragrance : entity.getFragranceGroup()) {
 				this.addFragranceGroupResponseDto(new FragranceGroupResponseDto(fragrance));
+			}
+		}
+		if (entity.getPerfumeKeyword().size() == 0) {
+			this.perfumeKeywordsResponseDtoList = new ArrayList<>();
+		} else {
+			for (PerfumeKeyword keyword : entity.getPerfumeKeyword()) {
+				this.addKeywordsResponseDto(new PerfumeKeywordsResponseDto(keyword));
 			}
 		}
 

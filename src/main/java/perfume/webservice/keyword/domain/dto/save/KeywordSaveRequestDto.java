@@ -4,19 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import perfume.webservice.keyword.domain.entity.KeywordMaster;
 import perfume.webservice.keyword.domain.entity.KeywordType;
-import perfume.webservice.perfume.domain.dto.save.FragranceGroupSaveDto;
-import perfume.webservice.perfume.domain.entity.Fragrance;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class KeywordSaveDto {
+public class KeywordSaveRequestDto {
 
     @Schema(description = "키워드 id")
     private Long id;
@@ -38,7 +34,7 @@ public class KeywordSaveDto {
 
 
     @Builder
-    public KeywordSaveDto(String name, String desc, KeywordType keywordType) {
+    public KeywordSaveRequestDto(String name, String desc, KeywordType keywordType) {
         this.name = name;
         this.desc = desc;
         this.keywordType = keywordType;
