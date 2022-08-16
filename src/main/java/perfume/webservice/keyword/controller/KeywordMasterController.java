@@ -13,7 +13,7 @@ import perfume.webservice.common.dto.SavedResult;
 import perfume.webservice.common.exception.CustomBindingException;
 import perfume.webservice.common.exception.ResponseMsgType;
 import perfume.webservice.keyword.domain.dto.response.KeywordResponseDto;
-import perfume.webservice.keyword.domain.dto.save.KeywordSaveDtoList;
+import perfume.webservice.keyword.domain.dto.save.KeywordSaveRequestDtoList;
 import perfume.webservice.keyword.domain.entity.KeywordType;
 import perfume.webservice.keyword.searchcondition.KeywordSearchCondition;
 import perfume.webservice.keyword.service.KeywordMasterService;
@@ -31,7 +31,7 @@ public class KeywordMasterController {
 
     @Operation(summary = "키워드 정보 저장(insert & update)", description = "키워드 정보 저장처리 <br> <br>  insert와 update, 단 건과 다 건 모두 /api/admin/keyword 에서 처리한다.<br> insert와 update의 기준은 id값이며 id가 있으면 update 없으면 insert 한다 <br> <br> 키워드의 이름은 중복될 수 없다.")
     @PostMapping("/keyword")
-    public ApiResponses<SavedResult> saveKeyword(@RequestBody @Valid KeywordSaveDtoList requestDto, BindingResult bindingResult) {
+    public ApiResponses<SavedResult> saveKeyword(@RequestBody @Valid KeywordSaveRequestDtoList requestDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors() || requestDto.getKeywordSaveList() == null || requestDto.getKeywordSaveList().size() == 0 ) {
             log.error("---------------------- SAVE KEYWORD BINDING ERROR --------------------------");

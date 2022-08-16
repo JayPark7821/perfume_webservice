@@ -1,11 +1,10 @@
 package perfume.webservice.keyword.domain.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import perfume.webservice.common.entity.BaseTimeEntity;
-import perfume.webservice.keyword.domain.dto.save.KeywordSaveDto;
+import perfume.webservice.keyword.domain.dto.save.KeywordSaveRequestDto;
 
 import javax.persistence.*;
 
@@ -36,9 +35,9 @@ public class KeywordMaster extends BaseTimeEntity {
         this.keywordType = keywordType;
     }
 
-    public void update(KeywordSaveDto keywordSaveDto) {
-        this.name = keywordSaveDto.getName();
-        this.description = keywordSaveDto.getDesc();
-        this.keywordType = keywordSaveDto.getKeywordType();
+    public void update(KeywordSaveRequestDto keywordSaveRequestDto) {
+        this.name = keywordSaveRequestDto.getName();
+        this.description = keywordSaveRequestDto.getDesc();
+        this.keywordType = keywordSaveRequestDto.getKeywordType();
     }
 }

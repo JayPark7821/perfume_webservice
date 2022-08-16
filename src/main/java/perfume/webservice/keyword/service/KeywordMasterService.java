@@ -10,16 +10,12 @@ import perfume.webservice.common.dto.SavedResult;
 import perfume.webservice.common.exception.CustomIllegalArgumentException;
 import perfume.webservice.common.exception.ResponseMsgType;
 import perfume.webservice.keyword.domain.dto.response.KeywordResponseDto;
-import perfume.webservice.keyword.domain.dto.save.KeywordSaveDto;
-import perfume.webservice.keyword.domain.dto.save.KeywordSaveDtoList;
+import perfume.webservice.keyword.domain.dto.save.KeywordSaveRequestDto;
+import perfume.webservice.keyword.domain.dto.save.KeywordSaveRequestDtoList;
 import perfume.webservice.keyword.domain.entity.KeywordMaster;
 import perfume.webservice.keyword.repository.KeywordQueryRepository;
 import perfume.webservice.keyword.repository.KeywordRepository;
 import perfume.webservice.keyword.searchcondition.KeywordSearchCondition;
-import perfume.webservice.perfume.domain.entity.Perfume;
-
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,18 +27,18 @@ public class KeywordMasterService {
     private final KeywordQueryRepository keywordQueryRepository;
 
     @Transactional
-    public SavedResult saveKeyword(KeywordSaveDtoList requestDto) {
+    public SavedResult saveKeyword(KeywordSaveRequestDtoList requestDto) {
 
         SavedResult savedResult = new SavedResult();
 
-        for (KeywordSaveDto keywordSaveDto : requestDto.getKeywordSaveList()) {
-            if (keywordSaveDto.getId() == null) {
-                savedResult.addInsertedId(keywordRepository.save(keywordSaveDto.toEntity()).getId());
+        for (KeywordSaveRequestDto keywordSaveRequestDto : requestDto.getKeywordSaveList()) {
+            if (keywordSaveRequestDto.getId() == null) {
+                savedResult.addInsertedId(keywordRepository.save(keywordSaveRequestDto.toEntity()).getId());
             } else {
-                KeywordMaster keywordMaster = keywordRepository.findById(keywordSaveDto.getId())
-                        .orElseThrow(() -> new CustomIllegalArgumentException(ResponseMsgType.KEYWORD_NOT_FOUND, keywordSaveDto.getId()));
-                keywordMaster.update(keywordSaveDto);
-                savedResult.addUpdatedId(keywordSaveDto.getId());
+                KeywordMaster keywordMaster = keywordRepository.findById(keywordSaveRequestDto.getId())
+                        .orElseThrow(() -> new CustomIllegalArgumentException(ResponseMsgType.KEYWORD_NOT_FOUND, keywordSaveRequestDto.getId()));
+                keywordMaster.update(keywordSaveRequestDto);
+                savedResult.addUpdatedId(keywordSaveRequestDto.getId());
             }
         }
         return savedResult;
