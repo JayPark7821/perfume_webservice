@@ -28,8 +28,15 @@ public class CategoryGroupDetail extends BaseTimeEntity {
 
     private int level;
 
-    @Column(name = "description")
-    private String description;
+    public void setRelationWithCategoryGroup(CategoryGroup categoryGroup) {
+        this.categoryGroup = categoryGroup;
+    }
 
 
+    @Builder
+    public CategoryGroupDetail(Category category, CategoryGroup categoryGroup, int level) {
+        this.category = category;
+        this.categoryGroup = categoryGroup;
+        this.level = level;
+    }
 }
