@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-class KeywordSaveDtoTest {
+class KeywordSaveRequestDtoTest {
 
     @PersistenceContext
     EntityManager em;
