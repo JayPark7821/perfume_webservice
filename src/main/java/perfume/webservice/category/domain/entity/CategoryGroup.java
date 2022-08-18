@@ -25,7 +25,7 @@ public class CategoryGroup extends BaseTimeEntity {
     @Column(name = "category_group_desc")
     private String desc;
 
-    @OneToMany(mappedBy = "categoryGroup" )
+    @OneToMany(mappedBy = "categoryGroup", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CategoryGroupDetail> categoryGroupDetail = new ArrayList<>();
 
 
