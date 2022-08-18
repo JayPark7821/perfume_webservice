@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import perfume.webservice.common.dto.SavedResult;
 import perfume.webservice.common.exception.CustomIllegalArgumentException;
 import perfume.webservice.common.exception.ResponseMsgType;
+import perfume.webservice.keyword.domain.dto.response.KeywordOptionResponseDto;
 import perfume.webservice.keyword.domain.dto.response.KeywordResponseDto;
 import perfume.webservice.keyword.domain.dto.save.KeywordSaveRequestDto;
 import perfume.webservice.keyword.domain.dto.save.KeywordSaveRequestDtoList;
@@ -16,6 +17,9 @@ import perfume.webservice.keyword.domain.entity.KeywordMaster;
 import perfume.webservice.keyword.repository.KeywordQueryRepository;
 import perfume.webservice.keyword.repository.KeywordRepository;
 import perfume.webservice.keyword.searchcondition.KeywordSearchCondition;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -46,7 +50,12 @@ public class KeywordMasterService {
 
     public Page<KeywordResponseDto> findAllKeywordPageDesc(KeywordSearchCondition condition, Pageable pageable) {
         Page<KeywordMaster> results = keywordQueryRepository.searchKeywordsWithCondition(condition, pageable);
-        return results.map(keywordMaster -> new KeywordResponseDto(keywordMaster));
+        return results.map(KeywordResponseDto::new);
 
+    }
+
+    public List<KeywordOptionResponseDto> findKeywordsFromCategory(Long group, int level) {
+        List<KeywordMaster> results = keywordQueryRepository.findKeywordsFromCategory(group, level);
+        return results.stream().map(KeywordOptionResponseDto::new).collect(Collectors.toList());
     }
 }
