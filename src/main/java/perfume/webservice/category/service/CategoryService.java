@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import perfume.webservice.category.domain.dto.response.BaseCategoryGroupResponseDto;
 import perfume.webservice.category.domain.dto.save.*;
 import perfume.webservice.category.domain.entity.Category;
 import perfume.webservice.category.domain.entity.CategoryGroup;
@@ -16,6 +17,7 @@ import perfume.webservice.common.dto.SavedResult;
 import perfume.webservice.common.exception.CustomIllegalArgumentException;
 import perfume.webservice.common.exception.ResponseMsgType;
 import perfume.webservice.common.utils.ParamValidator;
+import perfume.webservice.perfume.domain.dto.response.PerfumeResponseDto;
 import perfume.webservice.perfume.repository.KeywordGroupRepository;
 
 import javax.persistence.PersistenceContext;
@@ -62,43 +64,53 @@ public class CategoryService {
         return savedResult;
     }
 
-    private Category getSubCategoriesByIds(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() ->  new CustomIllegalArgumentException(ResponseMsgType.SUBCATEGORY_NOT_FOUND, id));
-    }
 
     @Transactional
     public SavedResult saveCategoryGroup(CategoryGroupSaveRequestDtoList requestDtoList) {
-
         SavedResult savedResult = new SavedResult();
         for (CategoryGroupSaveRequestDto requestDto : requestDtoList.getCategoryGroupSaveRequestDto()) {
             if (requestDto.getId() == null) {
-                List<Long> categoryIds = requestDto.getCategoryGroupDetail().stream().map(CategoryGroupDetailSaveRequestDto::getCategoryId).collect(Collectors.toList());
-                List<Category> categoryList = categoryRepository.findByIds(categoryIds);
-                paramValidator.validateDupliAndExsistParams(categoryIds, categoryList.stream().map(Category::getId).collect(Collectors.toList()), "CATEGORY");
-                CategoryGroup categoryGroup = CategoryGroup.builder()
+
+                CategoryGroup savedCategoryGroup = categoryGroupRepository.save(CategoryGroup.builder()
                         .name(requestDto.getName())
                         .desc(requestDto.getDesc())
-                        .build();
-                CategoryGroup savedCategoryGroup = categoryGroupRepository.save(categoryGroup);
-
-
-                categoryList.stream().map(c -> CategoryGroupDetail.builder()
-                                .categoryGroup(savedCategoryGroup)
-                                .category(c)
-                                .level(requestDto.getCategoryGroupDetail().stream()
-                                        .filter(d -> Objects.equals(d.getCategoryId(), c.getId()))
-                                        .findFirst()
-                                        .orElseThrow(() -> new CustomIllegalArgumentException(ResponseMsgType.CONTAIN_PERCENTAGE_NOT_FOUND,
-                                                savedCategoryGroup.getName()))
-                                        .getLevel())
-                                .build())
-                        .forEach(categoryGroupDetailRepository::save);
+                        .build());
+                createCategoryGroupDetail(requestDto, savedCategoryGroup);
 
                 savedResult.addInsertedId(savedCategoryGroup.getId());
+            } else {
+                CategoryGroup categoryGroup = categoryGroupRepository.findById(requestDto.getId())
+                        .orElseThrow(() -> new CustomIllegalArgumentException(ResponseMsgType.CATEGORYGROUP_NOT_FOUND_NOT_FOUND, requestDto.getId()));
+
+                createCategoryGroupDetail(requestDto, categoryGroup);
+                savedResult.addUpdatedId(categoryGroup.getId());
             }
 
         }
         return savedResult;
+    }
+
+    private void createCategoryGroupDetail(CategoryGroupSaveRequestDto requestDto, CategoryGroup categoryGroup) {
+        List<Long> categoryIds = requestDto.getCategoryGroupDetail().stream().map(CategoryGroupDetailSaveRequestDto::getCategoryId).collect(Collectors.toList());
+        List<Category> categoryList = categoryRepository.findByIds(categoryIds);
+        paramValidator.validateDupliAndExsistParams(categoryIds, categoryList.stream().map(Category::getId).collect(Collectors.toList()), "CATEGORY");
+
+        categoryList.stream().map(c -> CategoryGroupDetail.builder()
+                        .categoryGroup(categoryGroup)
+                        .category(c)
+                        .level(requestDto.getCategoryGroupDetail().stream()
+                                .filter(d -> Objects.equals(d.getCategoryId(), c.getId()))
+                                .findFirst()
+                                .orElseThrow(() -> new CustomIllegalArgumentException(ResponseMsgType.CATEGORYGROUP_NOT_FOUND_NOT_FOUND,
+                                        categoryGroup.getName()))
+                                .getLevel())
+                        .build())
+                .forEach(categoryGroupDetailRepository::save);
+    }
+
+    public List<BaseCategoryGroupResponseDto> findBaseCategory() {
+        List<CategoryGroup> baseCategoryGroupAll = categoryGroupRepository.findBaseCategoryGroupAll();
+        return baseCategoryGroupAll.stream().map(BaseCategoryGroupResponseDto::new).collect(Collectors.toList());
     }
 
 
