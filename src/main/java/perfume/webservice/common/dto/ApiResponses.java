@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
-import perfume.webservice.auth.api.entity.user.User;
+import perfume.webservice.user.api.entity.user.User;
 
 @Getter
 public class ApiResponses<T> {

@@ -15,7 +15,7 @@ public enum ResponseMsgType {
     KEYWORD_NOT_FOUND("notFound.keyword"),
     KEYWORDGROUP_NOT_FOUND("notFound.keywordGroup"),
     CONTAIN_PERCENTAGE_NOT_FOUND("notFound.containPercentage"),
-    SUBCATEGORY_NOT_FOUND("notFound.subCategory"),
+    CATEGORYGROUP_NOT_FOUND_NOT_FOUND("notFound.categoryGroup"),
 
     BINDING_ERROR_PERFUME("binding.error.perfume"),
     BINDING_ERROR_FRAGRANCE("binding.error.fragrance"),
