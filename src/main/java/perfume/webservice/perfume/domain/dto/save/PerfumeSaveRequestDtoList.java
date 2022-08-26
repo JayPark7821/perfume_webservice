@@ -13,5 +13,8 @@ public class PerfumeSaveRequestDtoList {
     @Valid
     private List<PerfumeSaveRequestDto> perfumeSaveList;
 
-
+    @Builder
+    public PerfumeSaveRequestDtoList(List<PerfumeSaveRequestDto> perfumeSaveList) {
+        this.perfumeSaveList = perfumeSaveList;
+    }
 }
