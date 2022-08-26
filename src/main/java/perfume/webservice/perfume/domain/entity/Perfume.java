@@ -51,8 +51,8 @@ public class Perfume extends BaseTimeEntity {
     }
 
     public void setKeyword(List<PerfumeKeyword> perfumeKeywords) {
+        this.perfumeKeyword = perfumeKeywords;
         if (perfumeKeywords != null) {
-            this.perfumeKeyword = perfumeKeywords;
             for (PerfumeKeyword keyword : perfumeKeywords) {
                 keyword.setPerfumeRelation(this);
             }
@@ -60,8 +60,8 @@ public class Perfume extends BaseTimeEntity {
     }
 
     public void setFragranceGroup(List<FragranceGroup> fragranceGroup) {
+        this.fragranceGroup = fragranceGroup;
         if (fragranceGroup != null) {
-            this.fragranceGroup = fragranceGroup;
             for (FragranceGroup group : fragranceGroup) {
                 group.setPerfumeRelation(this);
             }
