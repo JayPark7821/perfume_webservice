@@ -22,7 +22,7 @@ public class WebserviceApplication {
 
 	public static final String APPLICATION_LOCATIONS = "spring.config.location="
 		+ "classpath:application.yml,"
-		+ "/app/config/perfume-webservice/real-application.yml";
+		+ "/home/ec2-user/app/config/perfume-webservice/real-application.yml";
 
 	@Bean
 	public BCryptPasswordEncoder psswordEncoder() {
