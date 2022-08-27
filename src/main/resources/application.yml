@@ -73,3 +73,21 @@ server:
       force: true
 
 ---
+spring:
+  config:
+    activate:
+      on-profile: set1
+spring.profiles.include: real-db
+
+server:
+  port: 8081
+
+---
+spring:
+  config:
+    activate:
+      on-profile: set2
+spring.profiles.include: real-db
+
+server:
+  port: 8082
