@@ -1,34 +1,29 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
+spring:
+  profiles:
+    active: local
 
+---
 
 spring:
+  config:
+    activate:
+      on-profile: local
   jpa:
     hibernate:
-      ddl-auto: update #none
+      ddl-auto: create-drop #none
     properties:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
         show_sql: true
-#        use_sql_comments: true
+  #        use_sql_comments: true
   h2:
     console:
       enabled: true
   datasource:
-    url: jdbc:h2:tcp://localhost/~/webservice
+    url: jdbc:h2:mem:testdb #//localhost/~/webservice
     username: sa
     password:
-
-
-
-
 
   security:
     oauth2:
@@ -43,14 +38,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
-  #springdoc:
-  #  default-consumes-media-type: application/json
-  #  default-produces-media-type: application/json
-  #  swagger-ui:
-  #    path: /swagger-ui.html
-  #    disable-swagger-default-url: true
-  #    display-query-params-without-oauth2: true
 
 springdoc:
   default-consumes-media-type: application/json
@@ -79,3 +66,13 @@ app:
   oauth2:
     authorizedRedirectUris:
       - http://localhost:3000/oauth/redirect
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+---
