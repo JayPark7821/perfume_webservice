@@ -1,10 +1,13 @@
 package perfume.webservice;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import perfume.webservice.user.config.properties.AppProperties;
@@ -20,19 +23,13 @@ import perfume.webservice.user.config.properties.CorsProperties;
 //@Import(AdminLoginConfig.class)
 public class WebserviceApplication {
 
-	public static final String APPLICATION_LOCATIONS = "spring.config.location="
-		+ "classpath:application.yml,"
-		+ "/home/ec2-user/app/config/perfume-webservice/real-application.yml";
-
 	@Bean
 	public BCryptPasswordEncoder psswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(WebserviceApplication.class)
-			.properties(APPLICATION_LOCATIONS)
-			.run(args);
+		SpringApplication.run(WebserviceApplication.class, args);
 	}
 
 

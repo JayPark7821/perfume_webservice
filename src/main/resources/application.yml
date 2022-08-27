@@ -1,93 +1,10 @@
 spring:
+  config:
+    import: optional:/app/config/springboot-webservice/application-realdb.yml , optional:C:\Users\carol\Desktop\HC\front\server\perfume_webservice\src\main\resources\application-realdb.yml
   profiles:
+    group :
+      local : local,comm
+      set1 : set1,comm
+      set2 : set2,comm
     active: local
 
----
-
-spring:
-  config:
-    activate:
-      on-profile: local
-  jpa:
-    hibernate:
-      ddl-auto: create-drop #none
-    properties:
-      hibernate:
-        format_sql: true
-        default_batch_fetch_size: 100
-        show_sql: true
-  #        use_sql_comments: true
-  h2:
-    console:
-      enabled: true
-
-
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 989151584431-ah5gqeql6siqnb7c1r0lq8aifoo0gjeg.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-              - email
-              - profile
-  mvc:
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
-springdoc:
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
-  swagger-ui:
-    path: swagger.html
-    disable-swagger-default-url: true
-  paths-to-match:
-    - /api/**
-
-cors:
-  allowed-origins: 'http://localhost:3000'
-  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
-  allowed-headers: '*'
-  max-age: 3600
-
-
-jwt.secret: '8sknjlO3NPTBqo319DHLNqsQAfRJEdKsETOds'
-
-
-app:
-  auth:
-    tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
-    tokenExpiry: 1800000
-    refreshTokenExpiry: 604800000
-  oauth2:
-    authorizedRedirectUris:
-      - http://localhost:3000/oauth/redirect
-server:
-  port: 8080
-  servlet:
-    context-path: /
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
-
----
-spring:
-  config:
-    activate:
-      on-profile: set1
-spring.profiles.include: real-db
-
-server:
-  port: 8081
-
----
-spring:
-  config:
-    activate:
-      on-profile: set2
-spring.profiles.include: real-db
-
-server:
-  port: 8082
