@@ -12,10 +12,7 @@ spring:
   h2:
     console:
       enabled: true
-  datasource:
-    url: jdbc:h2:tcp://localhost/~/webserviceTest
-    username: sa
-    password:
+
 
   jpa:
     hibernate:

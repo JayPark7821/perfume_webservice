@@ -20,10 +20,7 @@ spring:
   h2:
     console:
       enabled: true
-  datasource:
-    url: jdbc:h2:mem:testdb #//localhost/~/webservice
-    username: sa
-    password:
+
 
   security:
     oauth2:
