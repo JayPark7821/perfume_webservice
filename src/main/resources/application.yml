@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:C:\Users\carol\Desktop\HC\front\server\perfume_webservice\src\main\resources\application-realdb.yml, optional:/home/ec2-user/app/config/springboot-webservice/application-realdb.yml
+    import: optional:classpath:application-realdb.yml
   profiles:
     group :
       local : local,comm
