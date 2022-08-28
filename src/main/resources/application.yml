@@ -1,6 +1,6 @@
 spring:
   config:
-    import: optional:classpath:application-realdb.yml
+    import: optional:classpath:/application-realdb.yml
   profiles:
     group :
       local : local,comm
